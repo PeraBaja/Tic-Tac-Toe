@@ -1,0 +1,72 @@
+:root{
+    --main-color-background: #80D9FF;
+    --second-color-background: #04628A;
+    --text-color: #9cd7f0;
+    --circle-color: #c87c24;
+    --cross-color: #a875b3;
+}
+body{
+    background-color: var(--main-color-background);
+    color: var(--text-color);
+    margin-top: 10rem;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+#card{
+    position: relative;
+    background-color: var(--second-color-background);
+    padding: 10px;
+    width: 80vw;
+    height: 60vh;   
+    border-radius: 10%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+#board{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.box{
+    background-color: var(--second-color-background);
+    display: flex;
+    border-color: var(--text-color);
+    border-width: 2px;
+    width: 10vw;
+    height: 10vh;
+    border-radius: 10%;
+    border-style: solid;
+    justify-content: center;
+    align-items: center;
+}
+.cross {
+    position: relative;
+    width: 36px;
+    height: 36px;
+
+  }
+.cross:before, .cross:after {
+    position: absolute;
+    left: 40%;
+    display: inline-block;
+    content: '';
+    height: 36px;
+    width: 6px;
+    background-color: var(--cross-color);
+ }
+ .cross:before {
+    transform: rotate(45deg);
+  }
+  .cross:after {
+    transform: rotate(-45deg); 
+}
+.circle{
+    background-color: var(--circle-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+#reset-button{
+    margin-top: 15px;
+}
