@@ -1,46 +1,56 @@
-var chipType = "cross";
-var turn = 0;
-var boxPosition = [0,1,2,3,4,5,6,7,8];
+let chipType = "cross";
+let turn = 0;
+const boxes = [...document.querySelectorAll("#board .box")]
+
 const winMessage = document.createElement("div");
 
-document.querySelectorAll("#board .box").forEach(box => { 
+document.getElementById("reset-button").addEventListener("click", () => resetGame())
 
-  const chip = document.createElement("div");  
-  box.addEventListener("click", () => {
-    putChip(box, chip); 
-    boxPosition[box.id] = box.firstChild.className;
-    console.log(calculateWinner())
-    showWinner();
-  })
-  document.getElementById("reset-button").addEventListener("click", () => resetBoard(box, chip))
+boxes.forEach(box => { 
+
+    const chip = document.createElement("div");  
+    box.addEventListener("click", () => {
+      putChip(box, chip); 
+      console.log(calculateWinner())
+      showWinner();
+    })
+    
 })
 function putChip(box, chip){
     if(box.firstChild === null){
-        turn++;
         chip.className = chipType;
-        chipType = chipType === "cross" ? "circle" : "cross";
+        chipType = chipType === "cross" ? "circle" : "cross"
+        turn += 1
         box.appendChild(chip);
     }
 }
-function resetBoard(box, chip){
-    box.removeChild(chip);
+
+function resetGame(){
+    boxes.forEach(box => {
+        if (box.hasChildNodes()){
+            box.removeChild(box.firstChild )
+        }
+    })
+    
+    turn = 0;
+    enableBoxes()
+    winMessage.textContent = ''
 }
 function showWinner(){
   let winner = calculateWinner();
   
-  
-  if(winner !== null ){
-    document.querySelector("h1").appendChild(winMessage);
-    winMessage.id = "win-message";
+  if(winner !== null){
+    document.querySelector("h1").appendChild(winMessage)
+    winMessage.id = "win-message"
     
-     winMessage.textContent = `¡Congratulations, ${winner}!¡You win!`;
+    winMessage.textContent = `¡Congratulations, ${winner}!¡You win!`
+    disableBoxes()
   }
-  if(turn === 9){
-    document.querySelector("h1").appendChild(winMessage);
-    winMessage.textContent = "¡Empate!";
+  else if(turn === 9){
+    document.querySelector("h1").appendChild(winMessage)
+    winMessage.textContent = "¡Is a match!"
+    disableBoxes()
   }
-  
-  
 }
 function calculateWinner(){
     const lines = [
@@ -53,11 +63,27 @@ function calculateWinner(){
         [0, 4, 8],
         [2, 4, 6],
       ];
-      for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (boxPosition[a] && boxPosition[a] === boxPosition[b] && boxPosition[a] === boxPosition[c]){
-          return boxPosition[a];
+      const chips = boxes.map(box => box.firstChild?.className)
+      
+      for (const line of lines) {
+        const [a, b, c] = line;
+        
+        if (chips[a] && chips[a] === chips[b] && chips[a] === chips[c]){
+          return chips[a];
         }
       }
-      return null;
+    
+    return null;
 }
+
+function disableBoxes(){
+    boxes.forEach(box => { 
+        box.disabled = true
+      })
+}
+function enableBoxes(){
+    boxes.forEach(box => { 
+        box.disabled = false
+      })
+}
+
